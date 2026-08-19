@@ -45,7 +45,8 @@ export function Button({ title, onPress, variant = 'primary', disabled, loading,
           <AppText
             variant="title"
             color={palette.text}
-            style={{ fontFamily: fonts.bold, fontSize: 16 }}>
+            align="center"
+            style={{ fontFamily: fonts.bold, fontSize: 15, flexShrink: 1 }}>
             {title}
           </AppText>
         </View>
@@ -56,12 +57,13 @@ export function Button({ title, onPress, variant = 'primary', disabled, loading,
 
 const styles = StyleSheet.create({
   base: {
-    height: 56,
+    minHeight: 56,
     borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   row: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   disabled: { opacity: 0.55 },

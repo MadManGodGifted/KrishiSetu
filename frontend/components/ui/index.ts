@@ -4,6 +4,7 @@ export { Button } from './Button';
 export { Card } from './Card';
 export { Header } from './Header';
 export { Input } from './Input';
+export { Select } from './Select';
 export { Metric } from './Metric';
 export { PressableScale } from './PressableScale';
 export { ScoreRing } from './ScoreRing';

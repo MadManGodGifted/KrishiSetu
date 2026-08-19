@@ -2,16 +2,19 @@ import { HealthCard } from '@/components/health/HealthCard';
 import { AppText, Header, Screen } from '@/components/ui';
 import { farmHealth } from '@/constants/dummy';
 import { colors } from '@/constants/theme';
+import { useLocale } from '@/context/LocaleContext';
 
 export default function FarmHealthScreen() {
+  const { t } = useLocale();
+
   return (
     <Screen>
       <Header title="Farm health" subtitle="Simple status, not raw sensors" showBack />
       <AppText variant="body" color={colors.textSecondary}>
-        Each card is a plain-language read of soil, water, weather, vegetation, and risk.
+        {t('healthParamsHint')}
       </AppText>
-      {farmHealth.map((item) => (
-        <HealthCard key={item.id} {...item} />
+      {farmHealth.map(({ id, ...item }) => (
+        <HealthCard key={id} {...item} />
       ))}
     </Screen>
   );

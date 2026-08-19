@@ -16,6 +16,8 @@ import {
 } from '@expo-google-fonts/manrope';
 
 import { colors } from '@/constants/theme';
+import { LocaleProvider } from '@/context/LocaleContext';
+import { SettingsProvider } from '@/context/SettingsContext';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -42,19 +44,22 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={styles.root}>
-      <StatusBar style="dark" />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.background },
-          animation: 'fade',
-        }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="login" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="yield" />
-        <Stack.Screen name="farm-health" />
-      </Stack>
+      <LocaleProvider>
+        <SettingsProvider>
+          <StatusBar style="dark" />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: colors.background },
+              animation: 'fade',
+            }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="yield" />
+            <Stack.Screen name="farm-health" />
+          </Stack>
+        </SettingsProvider>
+      </LocaleProvider>
     </GestureHandlerRootView>
   );
 }

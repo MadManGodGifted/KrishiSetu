@@ -80,7 +80,7 @@ export default function AdvisorScreen() {
           <TextInput
             value={text}
             onChangeText={setText}
-            placeholder="Ask about crops, soil, deals..."
+            placeholder="Ask about crops, soil, yield..."
             placeholderTextColor={colors.textMuted}
             style={styles.input}
             returnKeyType="send"

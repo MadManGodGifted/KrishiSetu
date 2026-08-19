@@ -10,7 +10,6 @@ const icons: Record<string, { on: keyof typeof Ionicons.glyphMap; off: keyof typ
   index: { on: 'home', off: 'home-outline', label: 'Home' },
   recommend: { on: 'leaf', off: 'leaf-outline', label: 'Recommend' },
   advisor: { on: 'chatbubbles', off: 'chatbubbles-outline', label: 'Advisor' },
-  deals: { on: 'pricetag', off: 'pricetag-outline', label: 'Deals' },
   profile: { on: 'person', off: 'person-outline', label: 'Profile' },
 };
 
