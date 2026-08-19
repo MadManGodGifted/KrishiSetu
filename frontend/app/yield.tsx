@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, Linking, Platform, ScrollView, Share, StyleSheet, View } from 'react-native';
+import { Alert, Linking, ScrollView, Share, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -53,18 +53,10 @@ export default function YieldScreen() {
   ].join('\n');
 
   const downloadPdf = () => {
-    const html = buildPrintableHtml(shareText, t('reportFor'), t('pdfHint'));
-    if (Platform.OS === 'web' && typeof window !== 'undefined') {
-      const popup = window.open('', '_blank');
-      if (popup) {
-        popup.document.write(html);
-        popup.document.close();
-        popup.focus();
-        popup.print();
-        return;
-      }
-    }
-    Alert.alert(t('downloadPdf'), `${shareText}\n\n${t('pdfHint')}`);
+    router.push({
+      pathname: '/report',
+      params: { type: 'yield', cropId, acres: String(acres), season },
+    });
   };
 
   const shareWhatsapp = async () => {
@@ -95,23 +87,33 @@ export default function YieldScreen() {
           <PressableScale onPress={() => router.back()} style={styles.back}>
             <Ionicons name="chevron-back" size={20} color={colors.text} />
           </PressableScale>
-          <View style={{ flex: 1 }}>
-            <AppText variant="h2">{t('yieldTitle')}</AppText>
-            <AppText variant="caption">{report.seasonLabel}</AppText>
+          <View style={styles.titles}>
+            <AppText variant="h2" numberOfLines={1}>
+              {t('yieldTitle')}
+            </AppText>
+            <AppText variant="caption" numberOfLines={1}>
+              {report.seasonLabel}
+            </AppText>
           </View>
+        </View>
+        <View style={styles.actions}>
           <PressableScale onPress={downloadPdf} style={styles.toolBtn}>
             <Ionicons name="download-outline" size={16} color={colors.primaryDark} />
-            <AppText style={styles.toolLabel}>{t('downloadPdf')}</AppText>
+            <AppText style={styles.toolLabel} numberOfLines={1}>
+              {t('downloadPdf')}
+            </AppText>
           </PressableScale>
           <PressableScale onPress={shareWhatsapp} style={[styles.toolBtn, styles.wa]}>
             <Ionicons name="logo-whatsapp" size={16} color={colors.white} />
-            <AppText style={[styles.toolLabel, { color: colors.white }]}>{t('shareWhatsapp')}</AppText>
+            <AppText style={[styles.toolLabel, { color: colors.white }]} numberOfLines={1}>
+              {t('shareWhatsapp')}
+            </AppText>
           </PressableScale>
         </View>
 
         <Card>
           <AppText variant="label">{t('cropVariety')}</AppText>
-          <AppText variant="display" style={{ marginTop: 4 }}>
+          <AppText variant="h1" style={{ marginTop: 4 }} numberOfLines={2}>
             {pickText(report.crop.name, locale)}
           </AppText>
           <AppText variant="h2" color={colors.primaryDark}>
@@ -265,25 +267,6 @@ export default function YieldScreen() {
   );
 }
 
-function buildPrintableHtml(body: string, title: string, hint: string) {
-  const safe = body
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\n/g, '<br/>');
-  return `<!doctype html><html><head><meta charset="utf-8"/><title>${title}</title>
-    <style>
-      body { font-family: Segoe UI, sans-serif; padding: 32px; color: #122017; }
-      h1 { font-size: 22px; }
-      p { line-height: 1.5; font-size: 15px; }
-      .hint { color: #5C6B61; font-size: 12px; margin-top: 24px; }
-    </style></head><body>
-    <h1>${title}</h1>
-    <p>${safe}</p>
-    <p class="hint">${hint}</p>
-    </body></html>`;
-}
-
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   content: { padding: 16, paddingBottom: 36, gap: 16 },
@@ -291,8 +274,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    flexWrap: 'wrap',
   },
+  titles: { flex: 1, minWidth: 0 },
   back: {
     width: 40,
     height: 40,
@@ -301,9 +284,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  actions: { flexDirection: 'row', gap: 8 },
   toolBtn: {
+    flex: 1,
+    minWidth: 0,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
     backgroundColor: colors.white,
     borderWidth: 1,
@@ -319,8 +306,9 @@ const styles = StyleSheet.create({
   },
   toolLabel: {
     fontFamily: fonts.bold,
-    fontSize: 11,
+    fontSize: 12,
     color: colors.primaryDark,
+    flexShrink: 1,
   },
   hero: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, marginTop: 4, marginBottom: 6 },
   split: {

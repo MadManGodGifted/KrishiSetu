@@ -17,6 +17,16 @@ export const MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Au
 
 export type SeasonName = 'Kharif' | 'Rabi' | 'Zaid' | 'Perennial' | 'Custom';
 
+export type CalendarSeason = 'Kharif' | 'Rabi' | 'Zaid';
+
+/** Indian crop calendar from the current month. No farmer input needed. */
+export function currentIndianSeason(date = new Date()): CalendarSeason {
+  const month = date.getMonth();
+  if (month >= 5 && month <= 9) return 'Kharif';
+  if (month === 3 || month === 4) return 'Zaid';
+  return 'Rabi';
+}
+
 export function monthIndexInRange(month: number, start: number, end: number) {
   if (start <= end) return month >= start && month <= end;
   return month >= start || month <= end;

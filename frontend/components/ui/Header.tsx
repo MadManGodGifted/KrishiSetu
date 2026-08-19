@@ -28,11 +28,11 @@ export function Header({ title, subtitle, showBack, right }: Props) {
         <View style={styles.back} />
       )}
       <View style={styles.center}>
-        <AppText variant="h2" align="center">
+        <AppText variant="h2" align="center" numberOfLines={1}>
           {title}
         </AppText>
         {subtitle ? (
-          <AppText variant="caption" align="center">
+          <AppText variant="caption" align="center" numberOfLines={1}>
             {subtitle}
           </AppText>
         ) : null}
@@ -56,6 +56,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  center: { flex: 1, paddingHorizontal: 8 },
+  center: { flex: 1, minWidth: 0, paddingHorizontal: 8 },
   right: { width: 40, alignItems: 'flex-end' },
 });

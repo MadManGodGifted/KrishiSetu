@@ -11,3 +11,4 @@ export { ScoreRing } from './ScoreRing';
 export { Screen } from './Screen';
 export { SectionHeader } from './SectionHeader';
 export { SelectableChip, StatusChip } from './StatusChip';
+export { Skeleton } from './Skeleton';

@@ -1,6 +1,16 @@
-import { Text, type TextProps, type TextStyle } from 'react-native';
+import { Platform, Text, type TextProps, type TextStyle } from 'react-native';
 
 import { colors, fonts } from '@/constants/theme';
+
+const horizontalText: TextStyle =
+  Platform.OS === 'web'
+    ? ({
+        writingMode: 'horizontal-tb',
+        textOrientation: 'mixed',
+        wordBreak: 'normal',
+        overflowWrap: 'anywhere',
+      } as TextStyle)
+    : { writingDirection: 'ltr' };
 
 type Variant = 'display' | 'h1' | 'h2' | 'title' | 'body' | 'caption' | 'label' | 'number';
 
@@ -31,7 +41,13 @@ type Props = TextProps & {
 export function AppText({ variant = 'body', color, align, style, ...rest }: Props) {
   return (
     <Text
-      style={[variants[variant], color ? { color } : null, align ? { textAlign: align } : null, style]}
+      style={[
+        horizontalText,
+        variants[variant],
+        color ? { color } : null,
+        align ? { textAlign: align } : null,
+        style,
+      ]}
       {...rest}
     />
   );

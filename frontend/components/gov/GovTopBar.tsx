@@ -34,9 +34,13 @@ export function GovTopBar({ speechText }: Props) {
           <View style={styles.emblem}>
             <Ionicons name="leaf" size={16} color={colors.white} />
           </View>
-          <View style={{ flex: 1 }}>
-            <AppText style={styles.brandHi}>{t('govBrandHi')}</AppText>
-            <AppText style={styles.brandEn}>{t('govBrand')}</AppText>
+          <View style={{ flex: 1, minWidth: 0 }}>
+            <AppText style={styles.brandHi} numberOfLines={1}>
+              {t('govBrandHi')}
+            </AppText>
+            <AppText style={styles.brandEn} numberOfLines={1}>
+              {t('govBrand')}
+            </AppText>
             <AppText style={styles.dept} numberOfLines={1}>
               {t('govDept')}
             </AppText>
@@ -46,9 +50,13 @@ export function GovTopBar({ speechText }: Props) {
         <View style={styles.actions}>
           <PressableScale onPress={callHelpline} style={styles.help}>
             <Ionicons name="call" size={14} color={colors.white} />
-            <View>
-              <AppText style={styles.helpLabel}>{t('helplineLabel')}</AppText>
-              <AppText style={styles.helpNum}>{t('helpline')}</AppText>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <AppText style={styles.helpLabel} numberOfLines={1}>
+                {t('helplineLabel')}
+              </AppText>
+              <AppText style={styles.helpNum} numberOfLines={1}>
+                {t('helpline')}
+              </AppText>
             </View>
           </PressableScale>
 
@@ -128,6 +136,7 @@ const styles = StyleSheet.create({
   },
   help: {
     flex: 1,
+    minWidth: 0,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,

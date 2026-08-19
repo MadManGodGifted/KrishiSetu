@@ -306,7 +306,7 @@ export const aiReplies: Record<string, string> = {
   'How is my soil?':
     'Soil health is Good (82). Black cotton soil is holding nutrients well. A light nitrogen dose before sowing will keep the score high.',
   'What if my land is hilly?':
-    'On sloping land, millets rise in the ranking. Bajra and jowar need less water and hold the soil better than cane or cotton. Open Crop recommendation, set topology to Hills, and re-analyze.',
+    'On sloping land, millets rise in the ranking. Bajra and jowar need less water and hold the soil better than cane or cotton. Update the farm plot in Profile if the land is hilly — recommendations will refresh from that profile.',
 };
 
 export const defaultAiReply =

@@ -56,6 +56,15 @@ export type RankedCrop = CropCandidate & {
   topologyFit: TopologyFit;
 };
 
+export type HighlightBadge =
+  | 'best-match'
+  | 'highest-profit'
+  | 'lowest-water'
+  | 'safest'
+  | 'fastest'
+  | 'best-msp'
+  | 'low-investment';
+
 export type CropSort = 'match' | 'profit' | 'input' | 'market';
 export type DurationFilter = 'all' | DurationBand;
 export type WaterFilter = 'all' | WaterNeed;
@@ -1274,6 +1283,52 @@ export function buildYieldReport(
       .slice(0, 2)
       .map(buildSeries),
   };
+}
+
+export function assignHighlights(crops: RankedCrop[]): Record<string, HighlightBadge[]> {
+  const result: Record<string, HighlightBadge[]> = {};
+  if (crops.length === 0) return result;
+
+  const add = (id: string, badge: HighlightBadge) => {
+    const list = result[id] ?? [];
+    if (!list.includes(badge)) list.push(badge);
+    result[id] = list;
+  };
+
+  add(crops[0].id, 'best-match');
+
+  const waterRank: Record<WaterNeed, number> = { low: 0, medium: 1, high: 2 };
+  const safeRank: Record<Resilience, number> = { high: 0, medium: 1, low: 2 };
+
+  const richest = [...crops].sort((a, b) => b.netIncomePerAcre - a.netIncomePerAcre)[0];
+  add(richest.id, 'highest-profit');
+
+  const driest = [...crops].sort(
+    (a, b) => waterRank[a.waterNeed] - waterRank[b.waterNeed] || a.durationMin - b.durationMin,
+  )[0];
+  add(driest.id, 'lowest-water');
+
+  const safest = [...crops].sort(
+    (a, b) => safeRank[a.resilience] - safeRank[b.resilience] || b.score - a.score,
+  )[0];
+  add(safest.id, 'safest');
+
+  const annual = crops.filter((crop) => !crop.perennial);
+  if (annual.length) {
+    const fastest = [...annual].sort((a, b) => a.durationMax - b.durationMax)[0];
+    add(fastest.id, 'fastest');
+  }
+
+  const withMsp = crops.filter((crop) => crop.mspSupported);
+  if (withMsp.length) {
+    const bestMsp = [...withMsp].sort((a, b) => (b.mspPrice ?? 0) - (a.mspPrice ?? 0))[0];
+    add(bestMsp.id, 'best-msp');
+  }
+
+  const cheapest = [...crops].sort((a, b) => a.inputCostPerAcre - b.inputCostPerAcre)[0];
+  add(cheapest.id, 'low-investment');
+
+  return result;
 }
 
 export function yieldSpeechSummary(report: YieldReport, locale: Locale): string {

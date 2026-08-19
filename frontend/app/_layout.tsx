@@ -57,6 +57,9 @@ export default function RootLayout() {
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="yield" />
             <Stack.Screen name="farm-health" />
+            <Stack.Screen name="crop/[id]" />
+            <Stack.Screen name="crop/buyers" />
+            <Stack.Screen name="report" />
           </Stack>
         </SettingsProvider>
       </LocaleProvider>
