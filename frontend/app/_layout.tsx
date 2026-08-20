@@ -1,9 +1,10 @@
 import 'react-native-gesture-handler';
 
-import { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { Image } from 'expo-image';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
@@ -23,7 +24,26 @@ export { ErrorBoundary } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
 
+const FONT_WAIT_MS = 2000;
+
+function BootSplash() {
+  useEffect(() => {
+    void SplashScreen.hideAsync();
+  }, []);
+
+  return (
+    <View style={styles.splash}>
+      <Image
+        source={require('../assets/images/splash-icon.png')}
+        style={styles.logo}
+        contentFit="contain"
+      />
+    </View>
+  );
+}
+
 export default function RootLayout() {
+  const [ready, setReady] = useState(false);
   const [loaded, error] = useFonts({
     Manrope_400Regular,
     Manrope_500Medium,
@@ -33,14 +53,21 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+    if (loaded || error) {
+      setReady(true);
+      void SplashScreen.hideAsync();
+      return;
+    }
 
-  useEffect(() => {
-    if (loaded) SplashScreen.hideAsync();
-  }, [loaded]);
+    const timeout = setTimeout(() => {
+      setReady(true);
+      void SplashScreen.hideAsync();
+    }, FONT_WAIT_MS);
 
-  if (!loaded) return null;
+    return () => clearTimeout(timeout);
+  }, [loaded, error]);
+
+  if (!ready) return <BootSplash />;
 
   return (
     <GestureHandlerRootView style={styles.root}>
@@ -69,4 +96,14 @@ export default function RootLayout() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  splash: {
+    flex: 1,
+    backgroundColor: '#2E7D32',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logo: {
+    width: 200,
+    height: 200,
+  },
 });

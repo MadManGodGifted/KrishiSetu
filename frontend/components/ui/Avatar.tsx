@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export function Avatar({ uri, name = 'R', size = 48 }: Props) {
+  const [failed, setFailed] = useState(false);
   const initials = name
     .split(' ')
     .map((part) => part[0])
@@ -19,10 +21,17 @@ export function Avatar({ uri, name = 'R', size = 48 }: Props) {
     .slice(0, 2)
     .toUpperCase();
 
+  const showImage = Boolean(uri) && !failed;
+
   return (
     <View style={[styles.wrap, { width: size, height: size, borderRadius: size / 2 }]}>
-      {uri ? (
-        <Image source={uri} style={{ width: size, height: size, borderRadius: size / 2 }} />
+      {showImage ? (
+        <Image
+          source={uri}
+          style={{ width: size, height: size, borderRadius: size / 2 }}
+          contentFit="cover"
+          onError={() => setFailed(true)}
+        />
       ) : (
         <AppText style={[styles.initials, { fontSize: size * 0.34 }]}>{initials}</AppText>
       )}
